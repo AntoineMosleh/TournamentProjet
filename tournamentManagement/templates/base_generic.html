@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Détails du tournoi : {{ tournament.name }}</h1>
+<div>
+    <h2>Participants</h2>
+    <ul>
+        {% for participant in participants %}
+        <li>{{ participant.name }} - {{ participant.points }} points</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'add_participant' tournament.id %}">Ajouter un participant</a>
+</div>
+{% endblock %}
