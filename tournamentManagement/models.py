@@ -5,7 +5,7 @@ class Tournament(models.Model):
     sport = models.CharField(max_length=100)
     participants = models.ManyToManyField('Participant', related_name='tournamentParticipants')
     isStarted = models.BooleanField(default=False)
-    isDone = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.name
