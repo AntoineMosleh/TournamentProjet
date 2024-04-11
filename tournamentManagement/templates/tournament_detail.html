@@ -1,17 +1,15 @@
-<!-- tournament_detail.html -->
-
 {% block content %}
 <h1>Détails du tournoi: {{ tournament.name }}</h1>
 <p>Sport: {{ tournament.sport }}</p>
 
-<h2>Ajouter un participant</h2>
+<h2>Veuillez saisir tous les participants au tournoi</h2>
 <form method="post" action="{% url 'add_participant' tournament.id %}">
     {% csrf_token %}
     {{ participant_form.as_p }}
     <button type="submit">Ajouter</button>
 </form>
 
-<h2>Veuillez saisir tous les participants au tournoi</h2>
+<h2>Classement</h2>
 <ol>
     {% for participant in participants %}
         <li>{{ participant.name }} - {{ participant.points }} points</li>
@@ -28,12 +26,16 @@
     {% for match in matches %}
     <div>
         <p>{{ match.firstParticipant.name }} vs {{ match.secondParticipant.name }} - Score actuel: {{ match.firstParticipantScore }}:{{ match.secondParticipantScore }}</p>
-        <form method="post" action="{% url 'addScoreForMatch' match.id tournament.id %}">
-            {% csrf_token %}
-            <input type="text" name="firstParticipantScore" placeholder="Score {{ match.firstParticipant.name }}" required>
-            <input type="text" name="secondParticipantScore" placeholder="Score {{ match.secondParticipant.name }}" required>
-            <button type="submit">Ajouter le score</button>
-        </form>
+        {% if match.firstParticipantScore == 0 and match.secondParticipantScore == 0 %}
+            <form method="post" action="{% url 'addScoreForMatch' match.id tournament.id %}">
+                {% csrf_token %}
+                <input type="text" name="firstParticipantScore" placeholder="Score {{ match.firstParticipant.name }}" required>
+                <input type="text" name="secondParticipantScore" placeholder="Score {{ match.secondParticipant.name }}" required>
+                <button type="submit">Ajouter le score</button>
+            </form>
+        {% else %}
+        Score final: {{ match.firstParticipantScore }}:{{ match.secondParticipantScore }}
+        {% endif %}
     </div>
     {% endfor %}
 </ul>

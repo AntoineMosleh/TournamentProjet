@@ -34,19 +34,16 @@ def add_participant(request, tournament_id):
 def create_match_for_tournament(request, tournament_id):
     tournament = get_object_or_404(Tournament,pk=tournament_id)
     participantsAuTournoi = list(tournament.participants.all())
-    if len(participantsAuTournoi)%2 != 0:
-        return render(request, 'error.html', {'message': 'Le nombres de participants doit etre pair'})
-    else :
-        combinations = list(itertools.combinations(participantsAuTournoi, 2))
-        for combination in combinations:
-            Match.objects.create(
-                tournament=tournament,
-                firstParticipant=combination[0],
-                secondParticipant=combination[1]
-        )
-        tournament.isStarted = True
-        tournament.save()
-        return redirect('displayTournamentDetails', tournament_id=tournament_id)
+    combinations = list(itertools.combinations(participantsAuTournoi, 2))
+    for combination in combinations:
+        Match.objects.create(
+            tournament=tournament,
+            firstParticipant=combination[0],
+            secondParticipant=combination[1]
+    )
+    tournament.isStarted = True
+    tournament.save()
+    return redirect('displayTournamentDetails', tournament_id=tournament_id)
     
 def addScoreForMatch(request, match_id,tournament_id):
     match = get_object_or_404(Match, pk=match_id)
